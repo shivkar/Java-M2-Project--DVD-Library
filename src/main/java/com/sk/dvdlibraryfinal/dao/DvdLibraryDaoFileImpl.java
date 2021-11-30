@@ -31,7 +31,6 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
 
     private Map<String, Dvd> dvds = new HashMap<>();
 
-    
     @Override
     public List<Dvd> getAllDvds() throws DvdLibraryDaoException {
         loadLibrary();
@@ -43,11 +42,7 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
 
         loadLibrary();
         Dvd newDvd = dvds.put(dvdTitle, dvd);
-        try {
-            loadLibrary();
-        } catch (DvdLibraryDaoException ex) {
-            Logger.getLogger(DvdLibraryDaoFileImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        writeLibrary();
 
         return newDvd;
 //To change body of generated methods, choose Tools | Templates.
@@ -55,13 +50,10 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
 
     @Override
     public Dvd removeDvd(String dvdTitle) throws DvdLibraryDaoException {
+        loadLibrary();
         Dvd removedDvd = dvds.remove(dvdTitle);
-
-        try {
-            writeLibrary();
-        } catch (IOException ex) {
-            Logger.getLogger(DvdLibraryDaoFileImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        writeLibrary();
+        
         return removedDvd;//To change body of generated methods, choose Tools | Templates.
     }
 
@@ -108,7 +100,7 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
         scanner.close();
     }
 
-    private void writeLibrary() throws DvdLibraryDaoException, IOException {
+    private void writeLibrary() throws DvdLibraryDaoException {
 
         PrintWriter out;
 
